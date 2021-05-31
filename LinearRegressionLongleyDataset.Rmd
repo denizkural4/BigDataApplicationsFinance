@@ -1,0 +1,87 @@
+---
+title: "FRE 9733 - Homework 1"
+author: "Deniz Kural"
+date: "February 10, 2021"
+output:
+  html_document:
+    theme: lumen
+    higlight: tango
+  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##### **Exploring Properties of Dataframe Test or Longley Dataset**
+
+```{r Start }
+
+test=data.frame(longley) #Load the Longley Dataset into `Test` Dataframe
+str(test) #The Structure and Variable Types
+head(test) #Displaying first 5 rows of Test -Longley- Dataframe
+summary(test) #Summary of DataFrame Test - Statistical Properties-
+dim(test) #Dimensions of Test Dataframe
+nrow(test) #Row size of Test Dataset
+ncol(test) #Column size of Test Dataset
+names(test) #Names of Columns of Dataset
+
+```
+
+##### **Histogram of Armed Forces in Test Dataframe**
+
+```{r Histogram}
+
+Armed_Forces <- test$Armed.Forces
+hist(Armed_Forces,
+     col='darkmagenta')
+
+```
+
+###### **Create a Correlation Matrix of all Variables**
+
+```{r Correlation}
+cor_matrix <- cor(test)
+round(cor_matrix,2)
+
+```
+
+##### **Linear Regression on 'Employed' Variable of Test Dataframe**
+
+```{r Regression}
+olsFit <- lm(Employed ~., test) #Fit the model by OLS Regression
+
+```
+
+##### **Interpretation of the Results by statistics of Regression**
+
+```{r}
+summary(olsFit) #Summary of OLS Fit 
+
+```
+Unemployed, Armed Forces, Year predictors shows statistical signifance for the response variable `Employed`. we have a $R^{2}$ of 0.9925 which interprets that we can explain the variance of Employed variable upto 99.25% by using all predictors ihe model. Lastly, we have p value of 4.984e-10 which indicates that we can reject null hyphotesis and say that there is an association between predictors and response variable. However, independent relation to response variable can be concluded with the analysis of each individual predictor's p-value. 
+
+
+##### **Interpretation of the Results by MSE - Accuracy of the Model**
+
+```{r Interpretability}
+test_predict <- predict(olsFit,test) #Prediction of Employed from the Built Model 
+MSE_test <- mean((test$Employed-test_predict)^2) #Find MSE Score of Model
+print(MSE_test) #Print-Display the MSE score
+
+```
+
+When we test the built model with Mean Square Error (MSE), we get an error of 0.0522765 which is considerably low and we can say that our predicted responses are "close" enough to true responses.
+
+
+##### **Visualization of the Result**
+
+```{r Visualization}
+par(mfrow=c(2,2))
+plot(olsFit)
+```
+
+There are 4 plots that can be observed above. From the figures, we can say that although there is a slight non-linearity in the model, using linear regression is acceptable as regression line is almost smooth (non-linear). There are some outliers that can be observed from the Figure. These outliers specifically belong to 1950,1951 and 1956. However, to be stated as outlier form standardized residuals graph, we need to have larger values (larger than 3 studentized residuals are accepted as an outlier). If we look at the leverage graph, we can not see an higly leveraged point. 
+
+
+
